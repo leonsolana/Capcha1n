@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPCHA1N - Crypto Fashion & Memecoin Gear</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            overflow-x: hidden;
+            background: #0a0a0a;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 25%, #ffd700 50%, #32cd32 75%, #1e90ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="crypto-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><path d="M15 15 L25 15 L20 25 z" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="200" height="200" fill="url(%23crypto-pattern)"/></svg>');
+            animation: cryptoFloat 15s ease-in-out infinite;
+        }
+
+        @keyframes cryptoFloat {
+            0%, 100% { transform: translateX(0px) rotate(0deg); }
+            50% { transform: translateX(-30px) rotate(180deg); }
+        }
+
+        .crypto-symbols {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .crypto-symbol {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: floatCrypto 20s linear infinite;
+        }
+
+        @keyframes floatCrypto {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s both;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(45deg, #ff6b35, #ffd700, #32cd32, #1e90ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .tagline {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1s both;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 2px solid #ffd700;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.5s both;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.7);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #333;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid #ffd700;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .section {
+            padding: 80px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #0a0a0a;
+        }
+
+        .section h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+            background: linear-gradient(45deg, #ff6b35, #ffd700, #32cd32);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .section.visible h2 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .product-card:hover::before {
+            left: 100%;
+        }
+
+        .section.visible .product-card {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product-card:nth-child(1) { transition-delay: 0.1s; }
+        .product-card:nth-child(2) { transition-delay: 0.2s; }
+        .product-card:nth-child(3) { transition-delay: 0.3s; }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #ffd700;
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .product-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        .product-card p {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #32cd32;
+            margin-bottom: 1rem;
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.5);
+        }
+
+        .about {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            margin: 4rem 0;
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            color: #ccc;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .contact {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffd700 100%);
+            color: white;
+            text-align: center;
+            border-radius: 20px;
+            margin: 2rem;
+        }
+
+        .contact h2 {
+            color: white !important;
+            background: none !important;
+            -webkit-text-fill-color: white !important;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: white;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .submit-btn {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 15px 30px;
+            border: 2px solid white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .submit-btn:hover {
+            background: rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            background: #0a0a0a;
+            color: #ccc;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid #333;
+        }
+
+        .footer p {
+            margin-bottom: 1rem;
+        }
+
+        .crypto-ticker {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: #ffd700;
+            border-bottom: 1px solid #333;
+            animation: tickerGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes tickerGlow {
+            from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+            to { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero .tagline {
+                font-size: 1.3rem;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="crypto-ticker">
+        🚀 TO THE MOON! 🚀 DOGE: +420% | SHIB: +69% | PEPE: +1337% | HODL STRONG! 💎🙌
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">CAPCHA1N</div>
+            <ul class="nav-menu">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" id="inicio">
+        <div class="crypto-symbols">
+            <div class="crypto-symbol" style="left: 10%; animation-delay: 0s;">₿</div>
+            <div class="crypto-symbol" style="left: 20%; animation-delay: 2s;">Ð</div>
+            <div class="crypto-symbol" style="left: 30%; animation-delay: 4s;">Ξ</div>
+            <div class="crypto-symbol" style="left: 40%; animation-delay: 6s;">🚀</div>
+            <div class="crypto-symbol" style="left: 50%; animation-delay: 8s;">💎</div>
+            <div class="crypto-symbol" style="left: 60%; animation-delay: 10s;">🌙</div>
+            <div class="crypto-symbol" style="left: 70%; animation-delay: 12s;">🐕</div>
+            <div class="crypto-symbol" style="left: 80%; animation-delay: 14s;">🐸</div>
+            <div class="crypto-symbol" style="left: 90%; animation-delay: 16s;">💰</div>
+        </div>
+        <div class="hero-content">
+            <h1>CAPCHA1N</h1>
+            <div class="tagline">REP YOUR CRYPTO LIFESTYLE</div>
+            <p>Gorras, ropa y accesorios para verdaderos HODLers de memecoins 🚀💎</p>
+            <a href="#productos" class="cta-button">SHOP NOW 🛒</a>
+        </div>
+    </section>
+
+    <section class="section" id="productos">
+        <h2>🔥 PRODUCTOS CRYPTO 🔥</h2>
+        <div class="products">
+            <div class="product-card">
+                <div class="product-icon">🧢</div>
+                <h3>Gorra DOGE TO THE MOON</h3>
+                <p>Gorra premium con bordado de calidad. Perfecta para mostrar tu amor por el Dogecoin. Material 100% algodón, ajustable.</p>
+                <div class="price">0.069 ETH (~$150)</div>
+                <button class="buy-btn" onclick="addToCart('Gorra DOGE')">COMPRAR</button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">👕</div>
+                <h3>Camiseta DIAMOND HANDS</h3>
+                <p>Camiseta de algodón orgánico con estampado reflectante. Para los que nunca sueltan sus tokens. Diseño exclusivo CAPCHA1N.</p>
+                <div class="price">0.042 ETH (~$95)</div>
+                <button class="buy-btn" onclick="addToCart('Camiseta DIAMOND HANDS')">COMPRAR</button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">🎒</div>
+                <h3>Mochila BLOCKCHAIN</h3>
+                <p>Mochila táctica con compartimentos especializados para laptops y hardware wallets. Resistente al agua, perfecta para crypto nomads.</p>
+                <div class="price">0.15 ETH (~$320)</div>
+                <button class="buy-btn" onclick="addToCart('Mochila BLOCKCHAIN')">COMPRAR</button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">⌚</div>
+                <h3>Reloj HODL TIME</h3>
+                <p>Reloj digital con precios de crypto en tiempo real. Nunca más pierdas el track de tus memecoins favoritas. Bluetooth incluido.</p>
+                <div class="price">0.25 ETH (~$540)</div>
+                <button class="buy-btn" onclick="addToCart('Reloj HODL')">COMPRAR</button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">🧥</div>
+                <h3>Hoodie SHIBA ARMY</h3>
+                <p>Sudadera con capucha ultra suave. Diseño exclusivo de la Shiba Army. Perfecta para las noches frías esperando el pump.</p>
+                <div class="price">0.08 ETH (~$175)</div>
+                <button class="buy-btn" onclick="addToCart('Hoodie SHIBA')">COMPRAR</button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">🕶️</div>
+                <h3>Lentes LASER EYES</h3>
+                <p>Gafas de sol con protección UV total. Diseño futurista inspirado en el laser eyes de Bitcoin. Para los verdaderos maximalistas.</p>
+                <div class="price">0.055 ETH (~$120)</div>
+                <button class="buy-btn" onclick="addToCart('Lentes LASER')">COMPRAR</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section about" id="nosotros">
+        <h2>SOBRE CAPCHA1N</h2>
+        <p>
+            Somos la primera marca de ropa y accesorios 100% enfocada en la cultura crypto y memecoin. 
+            Nacimos de la comunidad, para la comunidad. Cada producto es diseñado por HODLers, para HODLers. 
+            Creemos que la revolución blockchain no es solo tecnológica, sino también cultural. 
+            CAPCHA1N es más que ropa, es una declaración de que el futuro financiero está aquí.
+            <br><br>
+            💎 Aceptamos pagos en BTC, ETH, DOGE, SHIB y más de 50 criptomonedas 💎
+        </p>
+    </section>
+
+    <section class="section contact" id="contacto">
+        <h2>CONTACTO</h2>
+        <div class="contact-form">
+            <form onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Satoshi Nakamoto">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="hodler@moon.crypto">
+                </div>
+                <div class="form-group">
+                    <label for="wallet">Wallet Address (Opcional)</label>
+                    <input type="text" id="wallet" name="wallet" placeholder="0x...">
+                </div>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje</label>
+                    <textarea id="mensaje" name="mensaje" rows="5" required placeholder="Cuéntanos sobre tu próximo pump..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">ENVIAR AL MOON 🚀</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2025 CAPCHA1N - Crypto Fashion Revolution</p>
+        <p>💎 DIAMOND HANDS SINCE 2009 💎</p>
+        <p>This is not financial advice. DYOR. HODL responsibly.</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Cart functionality
+        let cart = [];
+
+        function addToCart(product) {
+            cart.push(product);
+            alert(`🚀 ${product} agregado al carrito! 💎\n\nCarrito actual: ${cart.length} items\n\nRecuerda: HODL your fashion! 🌙`);
+        }
+
+        // Form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            alert('🚀 ¡Mensaje enviado al moon! Te contactaremos pronto, fellow HODLer! 💎🙌');
+            event.target.reset();
+        }
+
+        // Crypto price animation (mock)
+        function updateTicker() {
+            const ticker = document.querySelector('.crypto-ticker');
+            const prices = [
+                '🚀 DOGE: +420% | SHIB: +69% | PEPE: +1337% | HODL STRONG! 💎🙌',
+                '💎 BTC: $100K+ | ETH: TO THE MOON | MEME SEASON! 🌙',
+                '🐕 DOGE ARMY | 🐸 PEPE POWER | 🦴 SHIB SOLDIERS | 🚀 MOON SOON',
+                '⚡ LIGHTNING FAST GAINS | 💰 GENERATIONAL WEALTH | 🔥 BULL RUN'
+            ];
+            
+            let index = 0;
+            setInterval(() => {
+                ticker.textContent = prices[index % prices.length];
+                index++;
+            }, 3000);
+        }
+
+        // Start ticker animation
+        updateTicker();
+
+        // Add crypto particles on click
+        document.addEventListener('click', function(e) {
+            createCryptoParticle(e.clientX, e.clientY);
+        });
+
+        function createCryptoParticle(x, y) {
+            const symbols = ['₿', 'Ð', 'Ξ', '🚀', '💎', '🌙'];
+            const particle = document.createElement('div');
+            particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            particle.style.position = 'fixed';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.fontSize = '1.5rem';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1000';
+            particle.style.opacity = '1';
+            particle.style.transition = 'all 2s ease-out';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.style.transform = 'translateY(-100px) scale(0) rotate(360deg)';
+                particle.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => {
+                document.body.removeChild(particle);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
